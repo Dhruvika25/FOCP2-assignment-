@@ -1,40 +1,48 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <algorithm>
 using namespace std;
 
-void solve() {
-    int n;
-    cin >> n;
-
-    vector<int> a(n);
-    for (int i = 0; i < n; i++) cin >> a[i];
-
-    sort(a.begin(), a.end(), greater<int>());
-
-    unordered_set<int> used;
-
-    long long alex = 0, bob = 0;
-    bool turn = true; 
-
+string solve(int n, int a[]) {
+    sort(a, a + n, greater<int>());
+    int alex = 0, bob = 0;
+    int lastA = -1, lastB = -1; 
+    int turn = 0; 
     for (int i = 0; i < n; i++) {
-        if (used.count(a[i])) continue;
-
-        used.insert(a[i]);
-
-        if (turn) alex += a[i];
-        else bob += a[i];
-
-        turn = !turn;
+        if (turn == 0) {
+            if (a[i] != lastA) {
+                alex += a[i];
+                lastA = a[i];
+                turn = 1;
+            }
+        } else {
+            if (a[i] != lastB) {
+                bob += a[i];
+                lastB = a[i];
+                turn = 0;
+            }
+        }
     }
-
-    if (alex > bob) cout << "Alex\n";
-    else cout << "Bob\n";
+    if (alex > bob)
+        return "Alex";
+    else
+        return "Bob";
 }
 
 int main() {
     int t;
     cin >> t;
+
     while (t--) {
-        solve();
+        int n;
+        cin >> n;
+
+        int a[100000];
+        for (int i = 0; i < n; i++) {
+            cin >> a[i];
+        }
+
+        cout << solve(n, a) << endl;
     }
+
     return 0;
 }
